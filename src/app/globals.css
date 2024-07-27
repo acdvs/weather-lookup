@@ -2,32 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer base {
+  h1, p, input {
+    font-family: 'Open Sans', Arial, sans-serif;
+    @apply text-zinc-100;
   }
-}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: 0.6rem;
+    margin-bottom: 1.4rem;
+  }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  svg {
+    @apply fill-zinc-100
   }
 }
