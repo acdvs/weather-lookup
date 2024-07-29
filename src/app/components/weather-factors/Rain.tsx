@@ -34,7 +34,7 @@ const Weather = ({
 
   return (
     <WeatherFactor
-      icon={<RiRainyLine />}
+      icon={RiRainyLine}
       name="Weather"
       data={data}
       message={message}

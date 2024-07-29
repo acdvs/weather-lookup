@@ -21,7 +21,7 @@ const AirQuality = ({ value }: { value: NonNullable<WeatherData['aqi']> }) => {
 
   return (
     <WeatherFactor
-      icon={<RiFoggyLine />}
+      icon={RiFoggyLine}
       name="Air Quality Index"
       data={data}
       message={message}

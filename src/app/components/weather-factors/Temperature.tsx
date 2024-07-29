@@ -37,7 +37,7 @@ const Temperature = ({ base, feelsLike, className }: Props) => {
 
   return (
     <WeatherFactor
-      icon={<RiTempColdLine />}
+      icon={RiTempColdLine}
       name="Temperature"
       data={data}
       message={message}
