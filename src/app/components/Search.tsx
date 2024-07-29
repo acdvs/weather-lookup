@@ -1,6 +1,8 @@
 'use client';
 
-import { useLocation } from '@/store';
+import { LocationData, useLocation } from '@/store';
+import useValidation from '@/utils/useValidation';
+
 import ZipCode from './inputs/ZipCode';
 import City from './inputs/City';
 import USStateSelect from './inputs/USStateSelect';
@@ -18,14 +20,31 @@ const Search = ({ className }: { className?: string }) => {
     setState,
     setZipCode,
   } = useLocation();
+  const { handleSubmit, errors, resetError } = useValidation();
+
+  const handleChange = <V extends any>(
+    value: V,
+    action: (x: V) => void,
+    errorKey: keyof LocationData,
+  ) => {
+    action(value);
+    resetError(errorKey);
+
+    if (errorKey === 'country') {
+      resetError('city');
+      resetError('state');
+    }
+  };
 
   return (
-    <div className={className}>
       <div className="flex items-center gap-5">
+    <form onSubmit={handleSubmit} className={className}>
         <SearchSection>
           <CountrySelect
             value={country}
             onValueChange={(v) => handleChange(v, setCountry, 'country')}
+            error={!!errors.country}
+            errorMessage={errors.country}
           />
         </SearchSection>
         <SearchSection>
@@ -37,17 +56,21 @@ const Search = ({ className }: { className?: string }) => {
           <City
             value={city}
             onValueChange={(v) => handleChange(v, setCity, 'city')}
+            error={!!errors.city}
+            errorMessage={errors.city}
           />
           {country === 'US' && (
             <USStateSelect
               value={state}
               onValueChange={(v) => handleChange(v, setState, 'state')}
+              error={!!errors.state}
+              errorMessage={errors.state}
             />
           )}
         </SearchSection>
         <SearchButton />
       </div>
-    </div>
+    </form>
   );
 };
 
