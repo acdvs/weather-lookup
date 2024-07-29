@@ -16,6 +16,10 @@
   }
 
   svg {
-    @apply fill-zinc-100
+    @apply fill-zinc-100;
+  }
+
+  [role="tooltip"] {
+    @apply !text-zinc-800;
   }
 }

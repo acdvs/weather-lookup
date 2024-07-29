@@ -1,5 +1,7 @@
 'use client';
 
+import cx from 'classnames';
+
 import { LocationData, useLocation } from '@/store';
 import useValidation from '@/utils/useValidation';
 
@@ -37,46 +39,48 @@ const Search = ({ className }: { className?: string }) => {
   };
 
   return (
-      <div className="flex items-center gap-5">
-    <form onSubmit={handleSubmit} className={className}>
-        <SearchSection>
-          <CountrySelect
-            value={country}
-            onValueChange={(v) => handleChange(v, setCountry, 'country')}
-            error={!!errors.country}
-            errorMessage={errors.country}
+    <form
+      onSubmit={handleSubmit}
+      className={cx(className, 'flex items-stretch gap-5')}
+    >
+      <SearchSection>
+        <CountrySelect
+          value={country}
+          onValueChange={(v) => handleChange(v, setCountry, 'country')}
+          error={!!errors.country}
+          errorMessage={errors.country}
+        />
+      </SearchSection>
+      <SearchSection>
+        <ZipCode
+          value={zipCode || ''}
+          onValueChange={(v) => handleChange(v, setZipCode, 'zipCode')}
+          className="basis-[150px]"
+        />
+        <p className="self-start py-2">or</p>
+        <City
+          value={city}
+          onValueChange={(v) => handleChange(v, setCity, 'city')}
+          error={!!errors.city}
+          errorMessage={errors.city}
+        />
+        {country === 'US' && (
+          <USStateSelect
+            value={state}
+            onValueChange={(v) => handleChange(v, setState, 'state')}
+            error={!!errors.state}
+            errorMessage={errors.state}
           />
-        </SearchSection>
-        <SearchSection>
-          <p>or</p>
-          <ZipCode
-            value={zipCode || ''}
-            onValueChange={(v) => handleChange(v, setZipCode, 'zipCode')}
-          />
-          <City
-            value={city}
-            onValueChange={(v) => handleChange(v, setCity, 'city')}
-            error={!!errors.city}
-            errorMessage={errors.city}
-          />
-          {country === 'US' && (
-            <USStateSelect
-              value={state}
-              onValueChange={(v) => handleChange(v, setState, 'state')}
-              error={!!errors.state}
-              errorMessage={errors.state}
-            />
-          )}
-        </SearchSection>
-        <SearchButton />
-      </div>
+        )}
+      </SearchSection>
+      <SearchButton />
     </form>
   );
 };
 
 function SearchSection({ children }: React.PropsWithChildren) {
   return (
-    <div className="flex grow items-center gap-4 border-b-2 border-gray-700 pb-4 hover:border-gray-500 transition-colors">
+    <div className="flex grow items-start gap-4 border-b-2 border-gray-700 pb-4 hover:border-gray-500 transition-colors">
       {children}
     </div>
   );
