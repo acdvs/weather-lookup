@@ -33,13 +33,7 @@ const useWeather = () => {
 
   useEffect(() => {
     if (data && !data.error && !isLoading) {
-      // A bit ugly but necessary for history check
-      addHistory({
-        ...(city && { city }),
-        ...(country && { country }),
-        ...(state && { state }),
-        ...(zipCode && { zipCode }),
-      });
+      addHistory(query);
     }
   }, [data, isLoading]);
 

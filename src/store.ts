@@ -31,7 +31,7 @@ interface SearchValues {
 interface SearchActions {
   refetch: () => void;
   setLoading: (x: boolean) => void;
-  setHistory: (x: LocationData[]) => void;
+  setHistory: (queries: LocationData[]) => void;
   addHistory: (location: LocationData) => void;
 }
 
@@ -41,7 +41,7 @@ export const useSearch = create<SearchValues & SearchActions>((set) => ({
   history: [],
   refetch: () => set((state) => ({ queryTrigger: !state.queryTrigger })),
   setLoading: (x) => set({ loading: x }),
-  setHistory: (x) => set({ history: x }),
+  setHistory: (queries) => set({ history: queries }),
   addHistory: (query) =>
     set((state) => {
       if (state.history.some((savedQuery) => isEqual(query, savedQuery))) {
