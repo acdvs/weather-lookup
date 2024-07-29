@@ -1,23 +1,18 @@
 'use client';
 
 import { TextInput } from '@tremor/react';
-import { useLocation } from '@/store';
 
 type Props = React.ComponentProps<typeof TextInput>;
 
-const City = (props: Props) => {
-  const { city, setCity } = useLocation();
-
-  return (
+const City = (props: Props) => (
+  <div className="flex flex-col flex-grow">
     <TextInput
       {...props}
-      value={city || ''}
-      onValueChange={setCity}
       name="city"
       placeholder="City"
       autoComplete="address-level2"
     />
-  );
-};
+  </div>
+);
 
 export default City;

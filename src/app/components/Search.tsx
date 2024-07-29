@@ -8,19 +8,42 @@ import CountrySelect from './inputs/CountrySelect';
 import SearchButton from './inputs/SearchButton';
 
 const Search = ({ className }: { className?: string }) => {
-  const country = useLocation((state) => state.country);
+  const {
+    city,
+    country,
+    state,
+    zipCode,
+    setCity,
+    setCountry,
+    setState,
+    setZipCode,
+  } = useLocation();
 
   return (
     <div className={className}>
       <div className="flex items-center gap-5">
         <SearchSection>
-          <CountrySelect />
+          <CountrySelect
+            value={country}
+            onValueChange={(v) => handleChange(v, setCountry, 'country')}
+          />
         </SearchSection>
         <SearchSection>
-          <ZipCode />
           <p>or</p>
-          <City />
-          {country == 'US' && <USStateSelect />}
+          <ZipCode
+            value={zipCode || ''}
+            onValueChange={(v) => handleChange(v, setZipCode, 'zipCode')}
+          />
+          <City
+            value={city}
+            onValueChange={(v) => handleChange(v, setCity, 'city')}
+          />
+          {country === 'US' && (
+            <USStateSelect
+              value={state}
+              onValueChange={(v) => handleChange(v, setState, 'state')}
+            />
+          )}
         </SearchSection>
         <SearchButton />
       </div>
