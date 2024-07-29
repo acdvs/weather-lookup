@@ -1,10 +1,10 @@
 'use client';
 
+import { useEffect } from 'react';
 import cx from 'classnames';
 
 import { LocationData, useLocation, useSearch } from '@/store';
 import { locationToKey, locationToString } from '@/utils/location';
-import { useEffect } from 'react';
 
 const loadHistory = () => {
   const session = sessionStorage.getItem('history');
@@ -13,7 +13,7 @@ const loadHistory = () => {
 
 const History = ({ className }: { className?: string }) => {
   const { setCity, setCountry, setState, setZipCode } = useLocation();
-  const { history, setHistory, refetch } = useSearch();
+  const { history, setHistory, setQuery } = useSearch();
 
   useEffect(() => {
     const initialHistory = loadHistory();
@@ -30,7 +30,7 @@ const History = ({ className }: { className?: string }) => {
     setState(loc.state);
     setZipCode(loc.zipCode);
 
-    refetch();
+    setQuery(loc);
   };
 
   return (

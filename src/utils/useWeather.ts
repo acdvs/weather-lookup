@@ -3,14 +3,13 @@
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import { useLocation, useSearch } from '@/store';
+import { useSearch } from '@/store';
 
 const useWeather = () => {
-  const { zipCode, city, state, country } = useLocation();
-  const { queryTrigger, setLoading, addHistory } = useSearch();
+  const { query, setLoading, addHistory } = useSearch();
 
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: [zipCode, city, state, country],
+  const { data, isLoading } = useQuery({
+    queryKey: [query.zipCode, query.city, query.state, query.country],
     queryFn: () =>
       fetch('/api/weather', {
         method: 'POST',
@@ -18,14 +17,9 @@ const useWeather = () => {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ zipCode, city, state, country }),
+        body: JSON.stringify(query),
       }).then((res) => res.json()),
-    enabled: false,
   });
-
-  useEffect(() => {
-    refetch();
-  }, [queryTrigger]);
 
   useEffect(() => {
     setLoading(isLoading);

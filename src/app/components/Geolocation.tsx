@@ -5,7 +5,7 @@ import { useLocation, useSearch } from '@/store';
 
 const Geolocation = () => {
   const { setCity, setCountry, setState } = useLocation();
-  const refetch = useSearch((state) => state.refetch);
+  const setQuery = useSearch((state) => state.setQuery);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -26,7 +26,12 @@ const Geolocation = () => {
         setCity(data.city);
         setCountry(data.country);
         setState(data.state);
-        refetch();
+
+        setQuery({
+          city: data.city,
+          country: data.country,
+          state: data.state,
+        });
       });
     }
   }, []);

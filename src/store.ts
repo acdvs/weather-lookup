@@ -23,23 +23,23 @@ export const useLocation = create<LocationData & LocationActions>((set) => ({
 }));
 
 interface SearchValues {
-  queryTrigger: boolean;
+  query: LocationData;
   loading: boolean;
   history: LocationData[];
 }
 
 interface SearchActions {
-  refetch: () => void;
+  setQuery: (location: LocationData) => void;
   setLoading: (x: boolean) => void;
   setHistory: (queries: LocationData[]) => void;
   addHistory: (location: LocationData) => void;
 }
 
 export const useSearch = create<SearchValues & SearchActions>((set) => ({
-  queryTrigger: false,
+  query: {},
   loading: false,
   history: [],
-  refetch: () => set((state) => ({ queryTrigger: !state.queryTrigger })),
+  setQuery: (x) => set({ query: x }),
   setLoading: (x) => set({ loading: x }),
   setHistory: (queries) => set({ history: queries }),
   addHistory: (query) =>
