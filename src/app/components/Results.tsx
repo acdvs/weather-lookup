@@ -1,10 +1,11 @@
 'use client';
 
-import useWeather from '@/utils/useWeather';
+import dynamic from 'next/dynamic';
 
-import Rain from './weather-factors/Rain';
-import Temperature from './weather-factors/Temperature';
-import AirQuality from './weather-factors/AirQuality';
+import useWeather from '@/utils/useWeather';
+const Rain = dynamic(() => import('./weather-factors/Rain'));
+const Temperature = dynamic(() => import('./weather-factors/Temperature'));
+const AirQuality = dynamic(() => import('./weather-factors/AirQuality'));
 
 const Results = () => {
   const { data, isLoading } = useWeather();
