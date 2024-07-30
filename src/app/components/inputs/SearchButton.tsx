@@ -18,6 +18,7 @@ const SearchButton = () => {
       )}
       disabled={loading}
       tooltip="Search"
+      aria-label="Search"
     />
   );
 };

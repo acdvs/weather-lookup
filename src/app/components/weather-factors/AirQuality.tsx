@@ -6,10 +6,11 @@ import WeatherFactor from './WeatherFactor';
 const indexNames = ['Good', 'Fair', 'Moderate', 'Poor', 'Very poor'];
 
 const AirQuality = ({ value }: { value: NonNullable<WeatherData['aqi']> }) => {
+  const description = indexNames[value - 1];
   const data = (
     <>
       <p className="mb-3">{value} out of 5</p>
-      <p>{indexNames[value - 1]}</p>
+      <p aria-label={`Description: ${description}`}>{description}</p>
     </>
   );
 

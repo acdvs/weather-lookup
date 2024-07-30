@@ -18,7 +18,9 @@ const Weather = ({
           {inches} in ({millis} mm)
         </p>
       )}
-      <p>{description.replace(/^(.)/, (x) => x.toUpperCase())}</p>
+      <p aria-label={`Description: ${description}`}>
+        {description.replace(/^(.)/, (x) => x.toUpperCase())}
+      </p>
     </>
   );
 
