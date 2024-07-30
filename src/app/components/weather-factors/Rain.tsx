@@ -3,11 +3,7 @@ import { RiRainyLine } from '@remixicon/react';
 import { WeatherData } from '@/app/api/weather/route';
 import WeatherFactor from './WeatherFactor';
 
-const Weather = ({
-  id,
-  description,
-  lastHour,
-}: NonNullable<WeatherData['rain']>) => {
+const Weather = ({ id, description, lastHour }: WeatherData['weather']) => {
   const millis = lastHour?.toFixed(2) || null;
   const inches = lastHour ? (lastHour / 25.4).toFixed(2) : null;
 

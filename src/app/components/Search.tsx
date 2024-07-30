@@ -59,7 +59,7 @@ const Search = ({ className }: { className?: string }) => {
         />
         <p className="self-start py-2">or</p>
         <City
-          value={city}
+          value={city || ''}
           onValueChange={(v) => handleChange(v, setCity, 'city')}
           error={!!errors.city}
           errorMessage={errors.city}

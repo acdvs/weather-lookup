@@ -4,11 +4,12 @@ import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { useSearch } from '@/store';
+import { WeatherResponse } from '@/app/api/weather/route';
 
 const useWeather = () => {
   const { query, setLoading, addHistory } = useSearch();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery<WeatherResponse>({
     queryKey: [query.zipCode, query.city, query.state, query.country],
     queryFn: () =>
       fetch('/api/weather', {
@@ -19,19 +20,21 @@ const useWeather = () => {
         },
         body: JSON.stringify(query),
       }).then((res) => res.json()),
+    refetchOnMount: false,
+    initialData: { message: 'Choose a location' },
   });
 
   useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading]);
+    setLoading(isLoading || isFetching);
+  }, [isLoading, isFetching]);
 
   useEffect(() => {
-    if (data && !data.error && !isLoading) {
+    if (data.results) {
       addHistory(query);
     }
-  }, [data, isLoading]);
+  }, [data.results]);
 
-  return { data, isLoading };
+  return { data, isLoading: isLoading || isFetching };
 };
 
 export default useWeather;

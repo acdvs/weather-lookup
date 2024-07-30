@@ -6,27 +6,32 @@ import { LocationData } from '@/store';
 const BASE_URL = 'http://api.openweathermap.org';
 
 export type WeatherData = {
-  temp?: number;
-  feelsLike?: number;
-  rain?: {
+  temp: number;
+  feelsLike: number;
+  weather: {
     id: number;
     description: string;
     lastHour?: number;
   };
-  aqi?: number;
+  aqi: number;
+};
+
+export type WeatherResponse = {
+  results?: WeatherData;
   error?: string;
+  message?: string;
 };
 
 export async function POST(req: NextRequest) {
   const { city, country, state, zipCode }: LocationData = await req.json();
 
-  if (!city && !country && !state && !zipCode) {
-    return Response.json({ error: 'Choose a location' });
+  if (!country && (!zipCode || !city)) {
+    return Response.json({ error: 'No location chosen' });
   }
 
   let lat: number | null = null;
   let lon: number | null = null;
-  let weather: WeatherData = {};
+  let weather: Partial<WeatherData> = {};
 
   if (country) {
     if (zipCode) {
@@ -88,30 +93,28 @@ export async function POST(req: NextRequest) {
     `${BASE_URL}/data/2.5/air_pollution?${pollutionQuery}`,
   );
 
-  const [weatherRes, pollutionRes] = await Promise.allSettled([
+  const [weatherRes, pollutionRes] = await Promise.all([
     weatherReq,
     pollutionReq,
   ]);
 
-  if (weatherRes.status === 'fulfilled' && weatherRes.value.ok) {
-    const data = await weatherRes.value.json();
+  if (weatherRes.ok && pollutionRes.ok) {
+    const w = await weatherRes.json();
+    const p = await pollutionRes.json();
 
+    weather.temp = w.main.temp;
+    weather.feelsLike = w.main.feels_like;
     // https://openweathermap.org/weather-conditions#drizzle
-    weather.rain = {
-      id: data.weather[0].id,
-      description: data.weather[0].description,
-      lastHour: data.rain?.['1h'],
+    weather.weather = {
+      id: w.weather[0].id,
+      description: w.weather[0].description,
+      lastHour: w.rain?.['1h'],
     };
 
-    weather.temp = data?.main.temp;
-    weather.feelsLike = data?.main.feels_like;
+    weather.aqi = p.list[0].main.aqi;
+  } else {
+    return Response.json({ message: 'No weather data' });
   }
 
-  if (pollutionRes.status === 'fulfilled' && pollutionRes.value.ok) {
-    const data = await pollutionRes.value.json();
-
-    weather.aqi = data.list[0]?.main.aqi;
-  }
-
-  return Response.json(weather);
+  return Response.json({ results: weather });
 }

@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 
 import useWeather from '@/utils/useWeather';
+import { WeatherData } from '@/app/api/weather/route';
 const Rain = dynamic(() => import('./weather-factors/Rain'));
 const Temperature = dynamic(() => import('./weather-factors/Temperature'));
 const AirQuality = dynamic(() => import('./weather-factors/AirQuality'));
@@ -12,10 +13,10 @@ const Results = () => {
 
   if (isLoading) {
     return <p aria-live="polite">Loading...</p>;
-  } else if (data?.error) {
-    return <p aria-live="polite">{data.error}</p>;
-  } else if (!data) {
-    return <p aria-live="polite">No weather data</p>;
+  } else if (data.error || data.message) {
+    return <p aria-live="polite">{data.error || data.message}</p>;
+  } else if (!data.results) {
+    return <p aria-live="polite">Something went horribly wrong</p>;
   }
 
   return (
@@ -26,9 +27,12 @@ const Results = () => {
       aria-live="polite"
       aria-atomic="true"
     >
-      <Rain {...data.rain} />
-      <Temperature base={data.temp} feelsLike={data.feelsLike} />
-      <AirQuality value={data.aqi} />
+      <Rain {...data.results.weather} />
+      <Temperature
+        base={data.results.temp}
+        feelsLike={data.results.feelsLike}
+      />
+      <AirQuality value={data.results.aqi} />
     </div>
   );
 };
