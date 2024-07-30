@@ -21,17 +21,19 @@ const Geolocation = () => {
           body: JSON.stringify({ lat: latitude, lon: longitude }),
         });
 
-        const data = await res.json();
+        if (res.ok) {
+          const data = await res.json();
 
-        setCity(data.city);
-        setCountry(data.country);
-        setState(data.state);
+          setCity(data.city);
+          setCountry(data.country);
+          setState(data.state);
 
-        setQuery({
-          city: data.city,
-          country: data.country,
-          state: data.state,
-        });
+          setQuery({
+            city: data.city,
+            country: data.country,
+            state: data.state,
+          });
+        }
       });
     }
   }, []);
