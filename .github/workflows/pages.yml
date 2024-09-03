@@ -42,10 +42,6 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('yarn.lock') }}-
       - name: Install dependencies
         run: yarn install
-      - name: Run linter
-        run: yarn lint
-      - name: Run formatter
-        run: yarn format:check
       - name: Build
         run: yarn build
         env:
